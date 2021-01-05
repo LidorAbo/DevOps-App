@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-publisher-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publisher
+  template:
+    metadata:
+      labels:
+        app: publisher
+    spec:
+      containers:
+        - name: publisher
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-pv-claim
+          image: 192.168.1.16:5000/publisher
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+      volumes:
+      - name: postgres-pv-claim
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
