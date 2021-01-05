@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-analyzer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analyzer
+  template:
+    metadata:
+      labels:
+        app: analyzer
+    spec:
+      containers:
+        - name: analyzer
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-pv-claim
+          image: 192.168.1.16:5000/analyzer
+          resources:
+            requests:
+              cpu: "250m"
+            limits:
+              cpu: "2000m"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+      volumes:
+      - name: postgres-pv-claim
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
