@@ -17,11 +17,13 @@ spec:
           volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: postgres-pv-claim
-          image: 192.168.1.16:5000/notifier
+          image: 192.168.1.11:5000/notifier
           resources:
             requests:
               cpu: "250m"
-          imagePullPolicy: IfNotPresent
+            limits:
+              cpu: "2000m"
+          imagePullPolicy: 
           ports:
             - containerPort: 5000
       volumes:
